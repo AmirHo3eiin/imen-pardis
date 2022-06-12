@@ -1,0 +1,33 @@
+#!/bin/sh
+########################################
+set -e
+############# Variables ######################
+
+user="postgres"
+database="sample"
+name=$(date +"%Y%m%d_%H")
+input=$2
+in=$1
+
+################ my_case ##############################
+
+case ${in} in
+    "--create-db")
+        psql -U ${user} -c "CREATE DATABASE ${database} WITH ENCODING 'UTF8'" 2>/dev/null && echo "done" || echo "already exsist " ; exit 1
+        ;;
+
+    "--create-table")
+        psql -U ${user} -d ${database} -c "CREATE TABLE test${name} (ts TEXT ,ip_address TEXT ,username TEXT, service_type TEXT)" 2>/dev/null && echo "done" || echo "${name} ha
+        ;;
+
+    "--import")
+        psql -U ${user} -d ${database} -c "\copy test${name} (ts, ip_address, username, service_type ) FROM '${input}' delimiter ',' csv;" 2>/dev/null && echo "done" || echo "w
+        ;;
+
+    *)
+        echo "ERROR: unknown argument!"
+        echo "Available oprions: --create-table/--create-db/--import"
+        ;;
+
+esac
+#######################################################

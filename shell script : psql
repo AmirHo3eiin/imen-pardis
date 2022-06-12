@@ -17,11 +17,11 @@ case ${in} in
         ;;
 
     "--create-table")
-        psql -U ${user} -d ${database} -c "CREATE TABLE test${name} (ts TEXT ,ip_address TEXT ,username TEXT, service_type TEXT)" 2>/dev/null && echo "done" || echo "${name} ha
+        psql -U ${user} -d ${database} -c "CREATE TABLE test${name} (ts TEXT ,ip_address TEXT ,username TEXT, service_type TEXT)" 2>/dev/null && echo "done" || echo "${name} has already created" ; exit 1
         ;;
 
     "--import")
-        psql -U ${user} -d ${database} -c "\copy test${name} (ts, ip_address, username, service_type ) FROM '${input}' delimiter ',' csv;" 2>/dev/null && echo "done" || echo "w
+        psql -U ${user} -d ${database} -c "\copy test${name} (ts, ip_address, username, service_type ) FROM '${input}' delimiter ',' csv;" 2>/dev/null && echo "done" || echo "where is ${input}" ; exit 1
         ;;
 
     *)
